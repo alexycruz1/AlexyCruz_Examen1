@@ -12,6 +12,8 @@ void imprimir(char** matriz);
 int main(int argc, char*argv[]){
 	int size = 7;
 	int revisar_tablero = 0;
+	int revisar_numeral = 0;
+	int revisar_mas = 0;
 	char** matriz = new char*[size];
 
 	crear_llenar(matriz);
@@ -21,34 +23,75 @@ int main(int argc, char*argv[]){
 			if (matriz[i][j] == '.'){
 				revisar_tablero++;
 			}
+			if (matriz[i][j] == '+'){
+				revisar_mas++;
+			}
+			if (matriz[i][j] == '#'){
+				revisar_numeral++;
+			}
 		}
 	}
 ////////////////////////////////////////
-	while(revisar_tablero != 0){
+	while(revisar_tablero != 0 && revisar_numeral != 0 && revisar_mas != 0){
 		revisar_tablero = 0;
+		revisar_numeral = 0;
+		revisar_mas = 0;
 
-	mover1(matriz);
-	imprimir(matriz);
+		mover1(matriz);
+		imprimir(matriz);
+		for (int i = 0; i < size; i++){
+			for (int j = 0; j < size; j++){
+				if (matriz[i][j] == '.'){
+				revisar_tablero++;
+				}
+				if (matriz[i][j] == '+'){
+				revisar_mas++;
+				}
+				if (matriz[i][j] == '#'){
+				revisar_numeral++;
+				}
+			}
+		}
+
+		if (revisar_numeral != 0){
+		mover2(matriz);
+		imprimir(matriz);
+	}
+
+	revisar_tablero = 0;
+	revisar_numeral = 0;
+	revisar_mas = 0;
+	
 	for (int i = 0; i < size; i++){
 		for (int j = 0; j < size; j++){
 			if (matriz[i][j] == '.'){
 				revisar_tablero++;
 			}
-		}
-	}
-
-	mover2(matriz);
-	imprimir(matriz);
-	for (int i = 0; i < size; i++){
-		for (int j = 0; j < size; j++){
-			if (matriz[i][j] == '.'){
-				revisar_tablero++;
+			if (matriz[i][j] == '+'){
+				revisar_mas++;
+			}
+			if (matriz[i][j] == '#'){
+				revisar_numeral++;
 			}
 		}
 	}
-	
+
+	}
+
+	if (revisar_numeral == 0){
+		cout << endl;
+		cout << "El signo (+) gano" << endl;
+	}else if(revisar_mas == 0){
+		cout << endl;
+		cout << "El signo (#) gano" << endl;
 	}
 	
+	//inicio de borrado
+	for (int i = 0; i < size; i++){
+		delete [] matriz[i];
+	}
+
+	delete matriz;
 
 	return 0;
 }//fin del main
@@ -132,27 +175,34 @@ void mover1(char** matriz){
 			if (matriz[x2 + 1][y2] == '#'){//para comer
 				matriz[x2 + 1][y2] = '+';
 			}
+
 			if (matriz[x2 - 1][y2] == '#'){
 				matriz[x2 - 1][y2] = '+';
 			}
+
 			if(matriz[x2][y2 + 1] == '#'){
 				matriz[x2][y2 + 1] = '+';
 			}
+
 			if(matriz[x2][y2 - 1] == '#'){
 				matriz[x2][y2 - 1] = '+';
 			} 
+
 			if(matriz[x2 + 1][y2 + 1] == '#'){//inicio de diagonales
 				matriz[x2 + 1][y2 + 1] = '+';
 			}
+
 			if(matriz[x2 + 1][y2 - 1] == '#'){
 				matriz[x2 + 1][y2 - 1] = '+';
 			}
+
 			if(matriz[x2 - 1][y2 - 1] == '#'){
 				matriz[x2 - 1][y2 - 1] = '+';
 			}
+
 			if(matriz[x2 - 1][y2 + 1] == '#'){
 				matriz[x2 - 1][y2 + 1] = '+';
-			}	
+			}
 
 			}else if((x2 == x1 + 1) || (x2 == x1 - 1) || (y2 == y1 + 1) || (y2 == y1 - 1)){//if para clonar
 				matriz[x2][y2] = '+';
